@@ -1,0 +1,11 @@
+{
+  "name": "node_server",
+  "version": "1.0.0",
+  "description": "servidor de ejemplo con node",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "Danel Lafuente",
+  "license": "MIT"
+}
