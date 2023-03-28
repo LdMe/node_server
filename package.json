@@ -1,11 +1,25 @@
 {
   "name": "node_server",
   "version": "1.0.0",
-  "description": "servidor de ejemplo con node",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "start": "nodemon index.js"
   },
-  "author": "Danel Lafuente",
-  "license": "MIT"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LdMe/node_server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LdMe/node_server/issues"
+  },
+  "homepage": "https://github.com/LdMe/node_server#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.2.0",
+    "nodemon": "^2.0.22"
+  }
 }
