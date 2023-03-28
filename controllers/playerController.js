@@ -2,7 +2,31 @@ import connection from "../config/db.js";
 import Player from "../models/player.js";
 import Team from "../models/team.js";
 
+
 const getAll = async (req,res) => {
+    try {
+        let players = await Player.findAll({
+            attributes: ['idplayer','name','last_name','age'],
+            include: {
+                model: Team,
+                attributes: ['name','idteam'],
+                as: 'team'
+            }
+        });
+        res.render('players', {players: players});
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "Some error occurred while retrieving players."
+        });
+    }
+};
+const showNewPlayerForm = async (req, res) => {
+    let teams = await Team.findAll({
+        attributes: ['idteam','name']
+    });
+    res.render('new-player', {teams: teams});
+  };
+const getAll_old = async (req,res) => {
     try {
         let players = await Player.findAll({
             attributes: ['idplayer','name','last_name','age'],
@@ -51,6 +75,7 @@ const create = async (req,res) => {
         let last_name= req.body.last_name;
         let age = req.body.age;
         let idteam = req.body.idteam;
+        if (idteam == 0) idteam = null;
         let player = await Player.create({"name":name,"last_name":last_name,"age":age,"idteam":idteam});
         res.send(player);
     } catch (error){
@@ -127,5 +152,6 @@ export default {
     getById,
     create,
     update,
-    deletes
+    deletes,
+    showNewPlayerForm,
 }

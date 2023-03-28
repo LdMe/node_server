@@ -9,22 +9,26 @@ router.get("/", (req, res) => {
   //res.send("Mostrar todos los jugadores");
 });
 
-router.get("/:id", (req, res) => {
+router.get("/player/:id", (req, res) => {
   playerController.getById(req,res);
   //res.send("Mostrar un jugador con id "+req.params.id);
 });
+router.get("/new", (req, res) => {
+    playerController.showNewPlayerForm(req,res);
+    //res.send("Mostrar un jugador con id "+req.params.id);
+  });
 
 router.post("/", isAuthorized,(req,res)=> {
     playerController.create(req,res);
     //res.send("Crear un nuevo jugador");
 });
 
-router.put("/:id",isAuthorized, (req,res) =>{
+router.put("/player/:id",isAuthorized, (req,res) =>{
     playerController.update(req,res);
     //res.send("Modificar un jugador con id "+req.params.id);
 })
 
-router.delete("/:id",isAuthorized, (req,res) => {
+router.delete("/player/:id",isAuthorized, (req,res) => {
   playerController.deletes(req,res);
   //res.send("Eliminar un jugador con id "+req.params.id);
 })
