@@ -1,4 +1,4 @@
-import connection from "../config/db.js";
+import connection from "../../config/db.js";
 
 const getAll =  (req,res) => {
     let sql = "SELECT game.name,datetime,stadium.name as stadium, tournament.name as tournament\
