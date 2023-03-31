@@ -1,59 +1,105 @@
-import connection from "../../config/db.js";
 
-const getAll =  (req,res) => {
-    let sql = "SELECT *\
-    FROM team"; 
-    connection.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-    // return query
+import teamController from "./teamController.js";
+
+const getAll =  async(req,res) => {
+    let result = await teamController.getAll();
+    if (result[0] === 0) {
+        res.send(result[1]);
+    }
+    else {
+        let error = result[1];
+        res.status(500).send({
+            message: error.message || "Some error occurred while retrieving teams."
+        });
+    }
 };
 
-const getById = (req,res) => {
-    let sql = "SELECT *\
-    FROM team\
-    WHERE idteam = ? ";
-    connection.query(sql, [req.params.id], (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
+const getById = async (req,res) => {
+    let id = req.params.id;
+    let result = await teamController.getById(id);
+    if (result[0] === 0) {
+        if (result[1] === null){
+            res.status(404).send({
+                message: `Cannot find team with id=${id}.`
+            });
+        }
+        else {
+            res.send(result[1]);
+        }
+    }
+    else {
+        let error = result[1];
+        res.status(500).send({
+            message: error.message || "Some error occurred while retrieving teams."
+        });
+    }
+
 };
 
-const create = (req,res) => {
-    let creation_date = req.body.creation_date;
-    let idstadium = req.body.idstadium;
-    let idcaptain = req.body.idcaptain;
-    
-    let name = req.body.name;
-    let sql = "INSERT INTO team (name,idstadium,idcaptain,creation_date)\
-    VALUES (?,?,?,?)";
-    connection.query(sql, [name,idstadium,idcaptain,creation_date], (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
+const create = async (req,res) => {
+    let data ={
+        name: req.body.name,
+        idstadium: req.body.idstadium,
+        idcaptain: req.body.idcaptain,
+        creation_date: req.body.creation_date
+    }
+    let result = await teamController.create(data);
+    if (result[0] === 0) {
+        res.send(result[1]);
+    }
+    else {
+        let error = result[1];
+        res.status(500).send({
+            message: error.message || "Some error occurred while creating teams."
+        });
+    }
 };
 
-const update = (req,res) => {
-    let idstadium = req.body.idstadium;
-    let name = req.body.name;
-    let idcaptain = req.body.idcaptain;
+const update = async (req,res) => {
+    let data ={
+        name: req.body.name,
+        idstadium: req.body.idstadium,
+        idcaptain: req.body.idcaptain,
+        creation_date: req.body.creation_date
+    }
     let idteam = req.params.id;
-    let sql = "UPDATE team \
-    SET idcaptain=?, name=?,idstadium=?\
-    WHERE idteam=? ";
-    connection.query(sql, [idcaptain,name,idstadium,idteam], (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
+    let result = await teamController.update(data,idteam);
+    if (result[0] === 0) {
+        if (result[1] === 0){
+            res.status(404).send({
+                message: `Cannot find team with id=${idteam}.`
+            });
+        }
+        else {
+            res.send(result[1]);
+        }
+    }
+    else {
+        let error = result[1];
+        res.status(500).send({
+            message: error.message || "Some error occurred while updating teams."
+        });
+    }
 }
-const deletes = (req,res) => {
+const deletes = async(req,res) => {
     let idteam = req.params.id;
-    let sql = "DELETE FROM team WHERE idteam=?";
-    connection.query(sql, [idteam], (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
+    let result = await teamController.deletes(idteam);
+    if (result[0] === 0) {
+        if (result[1] === 0){
+            res.status(404).send({
+                message: `Cannot find team with id=${idteam}.`
+            });
+        }
+        else {
+            res.send("Team was deleted successfully!");
+        }
+    }
+    else {
+        let error = result[1];
+        res.status(500).send({
+            message: error.message || "Some error occurred while deleting teams."
+        });
+    }
 }
 
 export default {

@@ -1,7 +1,7 @@
 
 import playerController from "./playerController.js";
 
-import Team from "../../models/team.js";
+import teamController from "../team/teamController.js";
 
 const getAll = async (req,res) => {
     let result = await playerController.getAll();
@@ -38,30 +38,32 @@ const getById = async (req,res) => {
 };
 
 const createForm = async (req,res) => {
-    // let teams = await teamController.getAll();
-    let teams = await Team.findAll({
-        attributes: ['idteam','name']
-    });
-    res.render("player/new",{teams:teams});
+    let results = await teamController.getAll();
+    let error = req.query.error;
+    if (results[0] === 1 || results[1] === []) {
+        console.log(results[1]);
+        res.render("player/new",{error:error});
+    }
+    else{
+        let teams = results[1];
+        res.render("player/new",{teams:teams,error:error});
+    }
 }
 
 const create = async (req,res) => {
         let data = {
-            name: req.body.name,
-            last_name: req.body.last_name,
+            name: req.body.name === "" ? null : req.body.name,
+            last_name: req.body.last_name === "" ? null : req.body.last_name,
             age: req.body.age,
-            idteam: req.body.idteam
+            idteam: req.body.idteam == 0 ? null : req.body.idteam
         }
-
         let result = await playerController.create(data);
-
         if (result[0] === 0) {
-            res.send(result[1]);
+            res.redirect("/players");
         } else {
             let error = result[1];
-            res.status(500).send({
-                message: error.message || "Some error occurred while creating a player."
-            });
+            let errorUri = encodeURIComponent(error.message);
+            res.redirect(`/players/new?error=${errorUri}`);
         }
 }
 
@@ -88,21 +90,7 @@ const update = async (req,res) => {
 const deletes = async (req,res) => {
     let idplayer = req.params.id;
     let result = await playerController.deletes(idplayer);
-    if (result[0] === 0) {
-        if (result[1] == 0) {
-            res.status(404).send({
-                message: `Player with id=${idplayer} not found.`
-            });
-        }
-        else {
-            res.send("Player deleted");
-        }
-    } else {
-        let error = result[1];
-        res.status(500).send({
-            message: error.message || "Some error occurred while updating a player."
-        });
-    }
+    res.redirect("/players");
 }
 
 export default {

@@ -43,6 +43,7 @@ const getById = async (id) => {
 };
 
 const create = async (data) => {
+    
     try{
         let player = await Player.create(data);
         return [0,player];

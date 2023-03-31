@@ -1,8 +1,8 @@
 /*
 Mongoose model for User
 */
-import bcrypt from "bcrypt";
-import mongoose from "mongoose";
+//import bcrypt from "bcrypt";
+import mongoose from "../config/mongoose.js";
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -26,11 +26,11 @@ const userSchema = new mongoose.Schema({
     }
 });
 // add verifyPassword method to userSchema
-userSchema.methods.verifyPassword = function (password) {
+/* userSchema.methods.verifyPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
-};
+}; */
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("user", userSchema);
 
 export default User;
 

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 
-const isAuthorized2 = (req,res,next) => {
+const isAuthorized = (req,res,next) => {
     const password = req.body.password;
     if (password === "mi-contraseña"){
         next();
@@ -11,7 +11,7 @@ const isAuthorized2 = (req,res,next) => {
     }
 }
 
-const isAuthorized = (req,res,next) => {
+const isAuthorized34 = (req,res,next) => {
     let token = req.headers.authorization;
     if (token){
         token = token.replace('Bearer ', '');

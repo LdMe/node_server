@@ -17,7 +17,7 @@ router.get("/user/:id", (req, res) => {
 }
 );
 
-router.post("/", isAuthorized, (req,res)=> {
+router.post("/", (req,res)=> {
     userController.create(req,res);
     //res.send("Crear un nuevo equipo");
 }
@@ -32,13 +32,13 @@ router.put("/user/:id", isAuthorized, (req,res) =>{
 router.delete("/user/:id", isAuthorized, (req,res) => {
     userController.deletes(req,res);
     //res.send("Eliminar un equipo con id "+req.params.id);
-}
-)
+});
+
 router.get("/login", (req, res) => {
     userController.loginForm(req,res);
 });
 
-router.post("/login", authenticate,(req, res) => {
+router.post("/login",(req, res) => {
     userController.login(req,res);
     //res.send("Eliminar un equipo con id "+req.params.id);
 });

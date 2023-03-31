@@ -1,9 +1,6 @@
-/*
-MongoDB connection with Mongoose
-*/
 import mongoose from 'mongoose';
 
-const MONGODB_URI = 'mongodb://localhost:27017/pdros';
+const MONGODB_URI = 'mongodb://localhost:27017/petanca';
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,

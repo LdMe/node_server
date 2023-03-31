@@ -2,7 +2,6 @@ import express from "express";
 import routerAPI from "./routes/api/router.js"
 import routerView from "./routes/views/router.js"
 import dotenv from "dotenv";
-import mongoose from "./config/mongoose.js";
 import express_session from "express-session";
 import passport from "passport";
 import localStrategy from "./config/passport.js";
@@ -10,7 +9,7 @@ import localStrategy from "./config/passport.js";
 dotenv.config();
 const app = express();
 
-app.use(express.static("public"));
+app.use(express.static("css"));
 app.use(express_session({
   secret: "secret",
   resave: false,

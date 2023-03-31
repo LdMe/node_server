@@ -24,12 +24,12 @@ router.post("/", isAuthorized,(req,res)=> {
     //res.send("Crear un nuevo jugador");
 });
 
-router.put("/player/:id",isAuthorized, (req,res) =>{
+router.post("/player/update/:id",isAuthorized, (req,res) =>{
     playerController.update(req,res);
     //res.send("Modificar un jugador con id "+req.params.id);
 })
 
-router.delete("/player/:id",isAuthorized, (req,res) => {
+router.post("/player/delete/:id",isAuthorized, (req,res) => {
   playerController.deletes(req,res);
   //res.send("Eliminar un jugador con id "+req.params.id);
 })
