@@ -53,3 +53,7 @@ select, option {
     display: flex;
     justify-content: space-around;
 }
+
+img {
+    max-width: 80%;
+}
