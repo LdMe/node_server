@@ -3,34 +3,32 @@ import routerAPI from "./routes/api/router.js"
 import routerView from "./routes/views/router.js"
 import dotenv from "dotenv";
 import express_session from "express-session";
-import passport from "passport";
-import localStrategy from "./config/passport.js";
+import passport from "./config/passport.js";
 
-dotenv.config();
-const app = express();
+dotenv.config(); // Cargamos las variables de entorno
+const app = express(); // Creamos una aplicación de express
 
-app.use(express.static("css"));
-app.use(express_session({
-  secret: "secret",
-  resave: false,
-  saveUninitialized: false
+app.use(express.static("public")); // Indicamos que la carpeta public es estática, es decir, que se puede acceder a sus recursos sin necesidad de pasar por el servidor
+app.use(express_session({ // Configuramos la sesión mediante express-session, que es un middleware que nos permite gestionar las sesiones de los usuarios
+  secret: "lima", // Clave secreta para firmar la cookie
+  resave: false, // Indica si se debe guardar la sesión aunque no se haya modificado
+  saveUninitialized: false // Indica si se debe guardar una sesión nueva aunque no se haya inicializado
 }));
 
 
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(localStrategy);
+app.use(passport.initialize()); // Inicializamos passport
+app.use(passport.session()); // Inicializamos passport para que utilice las sesiones
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Indicamos que vamos a utilizar JSON
+app.use(express.urlencoded({ extended: true })); // Indicamos que vamos a utilizar datos codificados en la URL
 
-app.set('view engine', 'pug');
+app.set('view engine', 'pug'); // Indicamos que vamos a utilizar el motor de plantillas Pug
 
 
-app.use("/api", routerAPI);
-app.use("/", routerView);
+app.use("/api", routerAPI); // Indicamos que todas las rutas que empiecen por /api se gestionarán mediante el routerAPI
+app.use("/", routerView); // Indicamos que todas las rutas que empiecen por / se gestionarán mediante el routerView
 
-app.listen(3000, () => {
+app.listen(3000, () => { // Indicamos que el servidor escuche en el puerto 3000
   console.log("Server is running on port 3000");
 });
 

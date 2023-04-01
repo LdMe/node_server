@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+    h1 Editar usuario
+
+    form(action=`/users/user/edit/${userToEdit._id}`, method="post")
+        label(for="username") Usuario
+        input(type="text", name="username", id="username", value=`${userToEdit.username}`, required)
+        br
+        label(for="email") Email
+        input(type="email", name="email", id="email", value=`${userToEdit.email}`, required)
+        br
+        label(for="role") Rol
+        select(name="role", id="role")
+            
+            option(value="user", selected=(userToEdit.role === "user") ) User
+            option(value="admin", selected=(userToEdit.role === "admin")) Admin
+        br
+        label(for="password") Cambiar contraseña
+        input(type="password", name="password", id="password")
+        br
+        input(type="submit", class="btn edit", value="Editar")
+    a(href="/users")
+        button(class="btn") Volver

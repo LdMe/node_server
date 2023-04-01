@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+    h1 Usuarios
+    table(class="table table-striped", id="users") 
+        thead 
+          th Nombre 
+          th Email 
+          th Rol
+        tbody 
+          each user in users 
+            tr 
+              td= user.username 
+              td= user.email 
+              td= user.role
+              td 
+                if auth && auth.role == "admin"
+                    section(class="actions")
+                    form(action=`/users/user/edit/${user._id}`, method="get")
+                        input(type="submit",class="btn edit", value="Editar")
+                    form(action=`/users/user/delete/${user._id}`, method="post")
+                        input(type="submit",class="btn", value="Eliminar")
+    

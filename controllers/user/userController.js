@@ -1,25 +1,8 @@
 
 import User from "../../models/user.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import passport from "passport";
 
-// Create user
-/* const create = async (req, res) => {
-    const { username, password, email, role } = req.body;
-    try {
-        const hashedPassword = await bcrypt.hash(password,10);
-        const user = await User.create({
-            username,
-            password: hashedPassword,
-            email,
-            role
-        });
-        res.status(201).json(user);
-    } catch (error) {
-        res.status(409).json({ message: error.message });
-    }
-} */
+
 const create = async(req,res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password,10);
@@ -27,41 +10,48 @@ const create = async(req,res) => {
             username : req.body.username.toLowerCase(),
             password : hashedPassword,
             email : req.body.email,
-            role : req.body.role,
+            role : req.body.role || "user",
            }
         let user = await User.create(data);
-        res.send(user);
+        res.redirect("/login");
     } catch (error) {
-        res.status(500).send({
-            message: error.message || "Some error occurred while creating user."
-        });
+        res.redirect("/register?error="+error.message);
     }
     
 }
-// Login
-const login = async (req,res) => {
-    const username = req.body.username.toLowerCase();
-    let user = await User.findOne({username:username});
-    if (!user) {
-        res.status(404).send("El usuario no existe");
-        return;
-    }
-    let password = req.body.password;
-    if (await bcrypt.compare(password,user.password)){
-        res.send("Usuario y contraseña correctos");
-    }
-    else {
-        res.status(401).send("Contraseña incorrecta");
-    }
-}
-/* const login = async (req, res) => {
-    
-} */
 
+const logout = (req,res) => {
+    req.logout((err) => {
+        if (err) {
+            console.log(err);
+            }
+            res.redirect('/');
+            });
+            
+    
+
+}
 const loginForm = (req, res) => {
     res.render('user/login');
 }
-
+const registerForm = (req, res) => {
+    const error = req.query.error;
+    res.render('user/register',{error:error});
+}
+const updateForm = async (req, res) => {
+    const error = req.query.error;
+    try {
+        const user = await User.findById(req.params.id);
+        console.log("user",user);
+        res.render('user/edit',{userToEdit:user,error:error});
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+const login = (req,res) =>{
+    console.log(req.session);
+    res.redirect(req.session.returnTo || "/");
+}
 // Get user
 const getById = async (req, res) => {
     try {
@@ -74,8 +64,10 @@ const getById = async (req, res) => {
 // Get all users
 const getAll = async (req, res) => {
     try {
+        const auth = req.user;
         const users = await User.find();
-        res.status(200).json(users);
+        console.log(users);
+        res.render('user/list',{users: users,auth:auth});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -84,14 +76,18 @@ const getAll = async (req, res) => {
 // Update user
 const update = async (req, res) => {
     const { username, password, email, role } = req.body;
+    let hashedPassword = "";
+    if (password !== "") {
+        hashedPassword = await bcrypt.hash(password,10);
+    }
     try {
         const user = await User.findById(req.params.id);
-        user.username = username;
-        user.password = password;
-        user.email = email;
-        user.role = role;
+        user.username = username !== "" ? username : user.username;
+        user.password = password !== "" ? hashedPassword : user.password;
+        user.email = email !== "" ? email : user.email;
+        user.role = role !== "" ? role : user.role;
         const updatedUser = await user.save();
-        res.status(200).json(updatedUser);
+        res.redirect("/users");
     } catch (error) {
         res.status(409).json({ message: error.message });
     }
@@ -107,6 +103,6 @@ const deletes = async (req, res) => {
     }
 }
 
-export default { create, login,loginForm,  getById,getAll, update, deletes };
+export default { create, logout,login,loginForm, registerForm ,updateForm,getById,getAll, update, deletes };
 
 

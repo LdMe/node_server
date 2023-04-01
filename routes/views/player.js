@@ -1,5 +1,5 @@
 import { Router } from "express";
-import isAuthorized from "../../middlewares/auth.js";
+import {isAuthorized,isAdmin} from "../../middlewares/auth.js";
 import playerController from "../../controllers/player/playerViewController.js";
 
 const router = Router();
@@ -15,7 +15,7 @@ router.get("/player/:id", (req, res) => {
   //res.send("Mostrar un jugador con id "+req.params.id);
 });
 
-router.get("/new", (req, res) => {
+router.get("/new", isAuthorized, (req, res) => {
     playerController.createForm(req,res);
 });
 
@@ -24,12 +24,17 @@ router.post("/", isAuthorized,(req,res)=> {
     //res.send("Crear un nuevo jugador");
 });
 
-router.post("/player/update/:id",isAuthorized, (req,res) =>{
+router.get("/player/edit/:id",isAdmin, (req, res) => {
+    playerController.updateForm(req,res);
+    //res.send("Mostrar un jugador con id "+req.params.id);
+});
+
+router.post("/player/edit/:id",isAdmin, (req,res) =>{
     playerController.update(req,res);
     //res.send("Modificar un jugador con id "+req.params.id);
 })
 
-router.post("/player/delete/:id",isAuthorized, (req,res) => {
+router.post("/player/delete/:id",isAdmin, (req,res) => {
   playerController.deletes(req,res);
   //res.send("Eliminar un jugador con id "+req.params.id);
 })

@@ -1,13 +1,27 @@
 html
   head
     title Petanca League
+    link(rel="stylesheet", href="/css/style.css")
   body
     header
-      nav
-        ul
-          li Home
-          li About
-          li Contacto
+      block nav 
+        nav       
+          ul 
+            a(href="/")
+                li Inicio
+            a(href="/players")
+                li Jugadores
+            if auth
+              a(href="/users")
+                li Usuarios
+              a(href="/logout")
+                li Logout
+            else
+              a(href="/login")
+                li Login
+              a(href="/register")
+                li Registrarse
+
     main
       block content
     footer
