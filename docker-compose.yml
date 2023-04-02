@@ -10,11 +10,13 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf"
       - "./docker/mysql/petanca.sql:/docker-entrypoint-initdb.d/1petanca.sql"
       - "./docker/mysql/petanca_data.sql:/docker-entrypoint-initdb.d/2petanca_data.sql"
       - ./docker/data/mysql:/var/lib/mysql
     networks:
       - petanca
+    
   mongo:
     image: mongo:latest
     container_name: mongo-petanca
@@ -40,4 +42,3 @@ services:
       - petanca
 networks:
   petanca:
-  
