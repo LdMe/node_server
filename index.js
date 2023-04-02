@@ -1,11 +1,11 @@
+
 import express from "express";
 import routerAPI from "./routes/api/router.js"
 import routerView from "./routes/views/router.js"
-import dotenv from "dotenv";
 import express_session from "express-session";
 import passport from "./config/passport.js";
 
-dotenv.config(); // Cargamos las variables de entorno
+
 const app = express(); // Creamos una aplicación de express
 
 app.use(express.static("public")); // Indicamos que la carpeta public es estática, es decir, que se puede acceder a sus recursos sin necesidad de pasar por el servidor
@@ -21,6 +21,7 @@ app.use(passport.session()); // Inicializamos passport para que utilice las sesi
 
 app.use(express.json()); // Indicamos que vamos a utilizar JSON
 app.use(express.urlencoded({ extended: true })); // Indicamos que vamos a utilizar datos codificados en la URL
+
 
 app.set('view engine', 'pug'); // Indicamos que vamos a utilizar el motor de plantillas Pug
 
