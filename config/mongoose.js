@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
-
-const MONGODB_URI = 'mongodb://localhost:27017/petanca';
+const host = process.env.MONGODB_HOST || 'mongo-petanca';
+const port = process.env.MONGODB_PORT || 27017;
+const db = process.env.MONGODB_DB || 'petanca';
+const MONGODB_URI = `mongodb://${host}:${port}/${db}`;
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,

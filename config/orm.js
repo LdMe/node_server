@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize('petanca', 'root', 'mi-contraseña', {
-    host: 'localhost',
-    port: 3306,
+    host: process.env.MYSQL_HOST || 'mysql-petanca',
+    port: process.env.MYSQL_PORT || 3306,
     dialect: 'mysql'
   });
   
