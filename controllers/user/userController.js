@@ -10,7 +10,7 @@ const create = async(req,res) => {
             username : req.body.username.toLowerCase(),
             password : hashedPassword,
             email : req.body.email,
-            role : req.body.role || "user",
+            role : "user",
            }
         let user = await User.create(data);
         res.redirect("/login");
@@ -24,13 +24,11 @@ const logout = (req,res) => {
     req.logout((err) => {
         if (err) {
             console.log(err);
-            }
-            res.redirect('/');
-            });
-            
-    
-
+        }
+        res.redirect('/');
+    });
 }
+
 const loginForm = (req, res) => {
     res.render('user/login');
 }

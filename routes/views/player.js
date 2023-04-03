@@ -4,7 +4,7 @@ import playerController from "../../controllers/player/playerViewController.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/", isAuthorized,(req, res) => {
   playerController.getAll(req,res);
   //res.send("Mostrar todos los jugadores");
 });
@@ -15,7 +15,7 @@ router.get("/player/:id", (req, res) => {
   //res.send("Mostrar un jugador con id "+req.params.id);
 });
 
-router.get("/new", isAuthorized, (req, res) => {
+router.get("/new", isAdmin, (req, res) => {
     playerController.createForm(req,res);
 });
 
@@ -24,17 +24,17 @@ router.post("/", isAuthorized,(req,res)=> {
     //res.send("Crear un nuevo jugador");
 });
 
-router.get("/player/edit/:id",isAdmin, (req, res) => {
+router.get("/edit/:id", (req, res) => {
     playerController.updateForm(req,res);
     //res.send("Mostrar un jugador con id "+req.params.id);
 });
 
-router.post("/player/edit/:id",isAdmin, (req,res) =>{
+router.post("/edit/:id",isAdmin, (req,res) =>{
     playerController.update(req,res);
     //res.send("Modificar un jugador con id "+req.params.id);
 })
 
-router.post("/player/delete/:id",isAdmin, (req,res) => {
+router.post("/delete/:id",isAdmin, (req,res) => {
   playerController.deletes(req,res);
   //res.send("Eliminar un jugador con id "+req.params.id);
 })

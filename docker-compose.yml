@@ -40,5 +40,7 @@ services:
       - mongo
     networks:
       - petanca
+    volumes:
+      - ./:/usr/src/app
 networks:
   petanca:

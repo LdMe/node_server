@@ -27,7 +27,7 @@ const getById = async (req,res) => {
                 message: `Cannot find player with id=${id}.`
             });
         } else {
-            res.send(player);
+            res.render("player/show",{player:player});
         }
     }
     else {
@@ -69,7 +69,21 @@ const create = async (req,res) => {
         }
 }
 
+
 const updateForm = async (req,res) => {
+    let idplayer = req.params.id;
+    let result = await playerController.getById(idplayer);
+    let results = await teamController.getAll();
+
+    const player = result[1];
+    const teams = results[1];
+
+    res.render("player/edit",{player,teams});
+}
+
+
+
+/* const updateForm = async (req,res) => {
     let id = req.params.id;
     let result = await playerController.getById(id);
     let results = await teamController.getAll();
@@ -90,7 +104,7 @@ const updateForm = async (req,res) => {
             message: error.message || "Some error occurred while retrieving players."
         });
     }
-}
+} */
 
 const update = async (req,res) => {
         let data = {
@@ -106,9 +120,8 @@ const update = async (req,res) => {
             res.redirect("/players");
         } else {
             let error = result[1];
-            res.status(500).send({
-                message: error.message || "Some error occurred while updating a player."
-            });
+            let errorUri = encodeURIComponent(error.message);
+            res.redirect(`/players?error=${errorUri}`);
         }
 }
 
