@@ -41,6 +41,9 @@ services:
     networks:
       - petanca
     volumes:
-      - ./:/usr/src/app
+      - ./:/usr/src/app/
+      - exclude:/usr/src/app/node_modules/
+volumes:
+  exclude:
 networks:
   petanca:
