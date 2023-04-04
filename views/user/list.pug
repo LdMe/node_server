@@ -7,12 +7,19 @@ block content
           th Nombre 
           th Email 
           th Rol
+          th Avatar
+          th Acciones
         tbody 
           each user in users 
             tr 
               td= user.username 
               td= user.email 
               td= user.role
+              td
+                if user.avatar
+                    img(src=`${user.avatar}`, alt="avatar", width="80px")
+                else
+                    img(src="/img/default-avatar.jpg", alt="avatar", width="50px")
               td 
                 if auth && auth.role == "admin"
                     section(class="actions")
@@ -20,4 +27,5 @@ block content
                         input(type="submit",class="btn edit", value="Editar")
                     form(action=`/users/user/delete/${user._id}`, method="post")
                         input(type="submit",class="btn", value="Eliminar")
+              
     

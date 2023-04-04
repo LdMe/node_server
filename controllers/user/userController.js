@@ -73,17 +73,23 @@ const getAll = async (req, res) => {
 
 // Update user
 const update = async (req, res) => {
+    console.log("file",req.file);
     const { username, password, email, role } = req.body;
     let hashedPassword = "";
     if (password !== "") {
         hashedPassword = await bcrypt.hash(password,10);
     }
     try {
+
         const user = await User.findById(req.params.id);
         user.username = username !== "" ? username : user.username;
         user.password = password !== "" ? hashedPassword : user.password;
         user.email = email !== "" ? email : user.email;
         user.role = role !== "" ? role : user.role;
+        if (req.file) {
+            console.log("file",req.file.path.split("public")[1]);
+            user.avatar = req.file.path.split("public")[1];
+        }
         const updatedUser = await user.save();
         res.redirect("/users");
     } catch (error) {

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {isAuthorized,isAdmin} from "../../middlewares/auth.js";
 import userController from "../../controllers/user/userController.js";
-
+import upload from "../../middlewares/multer.js";
 const router = Router();
 
 router.get("/",isAuthorized, (req, res) => {
@@ -27,7 +27,7 @@ router.post("/", (req,res)=> {
 }
 );
 
-router.post("/user/edit/:id", isAdmin, (req,res) =>{
+router.post("/user/edit/:id", [isAdmin,upload.single("image")], (req,res) =>{
     userController.update(req,res);
     //res.send("Modificar un equipo con id "+req.params.id);
 }
