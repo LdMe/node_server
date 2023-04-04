@@ -3,9 +3,9 @@ extends ../layout
 block content
     h1 Editar usuario
     if userToEdit.avatar
-            img(src=`${userToEdit.avatar}`, alt="avatar", width="80px")
+            img(src=`${userToEdit.avatar}`, alt="avatar", class="avatar")
     else
-            img(src="/img/default-avatar.jpg", alt="avatar", width="50px")
+            img(src="/img/default-avatar.jpg", alt="avatar", class="avatar")
     form(action=`/users/user/edit/${userToEdit._id}`, method="post", enctype="multipart/form-data")
         label(for="username") Usuario
         input(type="text", name="username", id="username", value=`${userToEdit.username}`, required)
