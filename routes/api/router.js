@@ -13,7 +13,6 @@ router.use("/stadiums", stadiumRouter);
 router.use("/tournaments", tournamentRouter);
 
 
-
 export default router;
 
 

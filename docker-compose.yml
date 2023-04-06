@@ -1,0 +1,49 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-petanca
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mi-contraseña
+      MYSQL_DATABASE: petanca
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf"
+      - "./docker/mysql/petanca.sql:/docker-entrypoint-initdb.d/1petanca.sql"
+      - "./docker/mysql/petanca_data.sql:/docker-entrypoint-initdb.d/2petanca_data.sql"
+      - ~/data/mysql:/var/lib/mysql
+    networks:
+      - petanca
+    
+  mongo:
+    image: mongo:latest
+    container_name: mongo-petanca
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: petanca
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/data/mongo:/data/db
+    networks:
+      - petanca
+  node:
+    build: .
+    container_name: node
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+      - mongo
+    networks:
+      - petanca
+    volumes:
+      - ./:/usr/src/app/
+      - exclude:/usr/src/app/node_modules/
+volumes:
+  exclude:
+networks:
+  petanca:

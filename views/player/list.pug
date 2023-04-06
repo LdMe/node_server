@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+    
+    h1 Jugadores
+    table(class="table table-striped", id="players") 
+        thead 
+          th Nombre 
+          th Apellido 
+          th Edad 
+          th Equipo 
+        tbody 
+          each player in players 
+            tr 
+              td
+                a(href=`/players/player/${player.idplayer}`)= player.name 
+              td= player.last_name 
+              td= player.age 
+              if player.team 
+                td=player.team.name 
+              else 
+                td Sin Equipo
+              td 
+                if auth && auth.role == "admin"
+                  
+                  form(action=`/players/edit/${player.idplayer}`, method="get")
+                    input(type="submit",class="btn edit", value="Editar")
+                  form(action=`/players/delete/${player.idplayer}`, method="post")
+                    input(type="submit",class="btn", value="Eliminar")
+    if auth 
+      a(href="/players/new") Crear un jugador
